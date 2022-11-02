@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Personal accountant</title>
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
+    />
+</head>
+<body>
+<main class="container">
+    <nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
+         {% if user.is_authenticated %}
+        <ul>
+          <li>Welcome <b>{{ user.username }}!</b></li>
+          <li><a href="{% url 'logoutuser' %}" role="button">Logout</a></li>
+        </ul>
+        {% else %}
+        <ul>
+          <li><a href="{% url 'signupuser' %}" role="button">Sign Up</a></li>
+          <li><a href="{% url 'loginuser' %}" role="button">Login</a></li>
+        </ul>
+        {% endif %}
+        <h2>Hi, it's your personal accountant!</h2>
+        <ul>
+            <li><a href="/new_category/" role="button">Create Category</a></li>
+            <li><a href="/new_action/" role="button">Create Transaction</a></li>
+            <li><a href="/detail/" role="button">Financial report</a></li>
+        </ul>
+    </nav>
+    <h3>Balance: {{balance}}</h3>
+    <h4>Recent transactions:</h4>
+    {% if actions%}
+    {% for action in actions%}
+    <ul>
+        {%if action.type is True%}
+        <li>
+            {{action.category.name}} : <span style="color:green"> {{action.sum}}</span> | {{action.added}} UTC
+        </li>
+        {%else%}
+        <li>
+            {{action.category.name}} : <span style="color:blue"> {{action.sum}}</span> | {{action.added}} UTC
+        </li>
+        {%endif%}
+    </ul>
+    {%endfor%}
+    {%else%}
+    <h3>Empty/</h3>
+    {%endif%}
+</main>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends "accountantapp/base.html" %}
+
+{% block content %}
+      {% if actions%}
+      <h3>Transactions between {{datetime_from}} - {{datetime_to}}:</h3>
+        <h2>Balance: {{balance}}</h2>
+        <h4 style="color:green">Income: {{income}}</h4>
+        <h4 style="color:blue">Outcome: {{outcome}}</h4>
+    {% for action in actions%}
+    <ul>
+        {%if action.type is True%}
+        <li>
+            {{action.category.name}} : <span style="color:green"> {{action.sum}}</span> | {{action.added}} UTC
+        </li>
+        {%else%}
+        <li>
+            {{action.category.name}} : <span style="color:blue"> {{action.sum}}</span> | {{action.added}} UTC
+        </li>
+        {%endif%}
+    </ul>
+    {%endfor%}
+        {%else%}
+        {%if datetime_from and datetime_to%}
+        <h1>No transactions found in between {{datetime_from}} - {{datetime_to}}.</h1>
+        {%endif%}
+      {%endif%}
+      <form method="GET" action="{% url 'detail' %}">
+        {% csrf_token %}
+         <div style="padding: 10px">
+          <label
+            >Enter the starting date:
+            <input type="datetime-local" name="datetime_from" required />
+          </label>
+        </div>
+        <div style="padding: 10px">
+          <label
+            >Enter the ending date:
+            <input type="datetime-local" name="datetime_to" required />
+          </label>
+        </div>
+        <div class="grid">
+          <button type="reset" class="secondary">Reset</button>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+{% endblock %}
